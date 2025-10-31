@@ -1,0 +1,151 @@
+F = False
+T = True
+
+freeze_omega_mode           = "none"     # "none" | "identity" 
+agent_seed                  = 241 
+
+accumulate_sender_grads     = T
+
+use_global_A                = T
+# ===========================
+# DOMAIN / SPATIAL SETTINGS
+# ===========================
+
+sigma_retraction_mode       = "exp"   #"exp" or "linear"
+sigma_rel_step_max          = 1e-1
+
+ell_q                       = 9
+ell_p                       = 9
+
+spec_q                      = [(ell_q, 1)]   # list[(ell, multiplicity)]
+spec_p                      = [(ell_p, 1)]
+
+mix_generators_q            = F
+mix_generators_p            = F
+                
+D                           = 2          # dimension of base manifold
+L                           = 20       # length of hypercubic base-manifold - PBCs
+
+steps                       = 500
+
+N                           = 8                   # Number of agents
+max_neighbors               = 8            # Max number of agent neighbors
+
+agent_radius_range          = (7,7)         #agent radii
+fixed_location              = T
+
+
+# Caching & transport
+transport_backend       = "pure"        # "pure" or "ctx" use cached paths everywhere (works across processes now)
+
+shared_cache_dir        = "./_checkpoints"   # SSD path if you have one
+
+# Joblib / loky
+joblib_prefer           = "processes"  # "processes" "threads"
+n_jobs                  = 23  
+joblib_memmap_threshold = "10G"        # enables memmap of large args (joblib Parallel max_nbytes)
+blas_threads_per_worker = 1            # avoid MKL/OpenBLAS oversubscription
+
+
+
+# ===========================
+#         COUPLINGS
+# ===========================
+obs_scale               = 0
+alpha                   = 1
+feedback_weight         = 0
+
+beta_kappa_q            = 1              # κ in exp(-KL/κ)
+beta_kappa_p            = 1
+
+kappa_gamma_q           = 1
+kappa_gamma_p           = 1
+
+A_init_scale            = 0     # small noise so grads aren’t identically zero
+lambda_A_curv           = 0
+Lambda_A_cov            = 0
+
+#======================
+#   LEARNING RATES
+#======================
+
+tau_phi                 = 1e-1
+tau_phi_model           = 1e-1  
+tau_mu_belief           = 1e-1       
+tau_sigma_belief        = 1e-1      
+tau_mu_model            = 1e-1      
+tau_sigma_model         = 1e-1     
+
+A_lr                    = 1e-2
+
+
+# ===========================
+# INITIALIZATION
+# ===========================
+
+# ─── Belief Bundle (q) Parameters ───
+q_mu_range              = (-3.0, 3.0)              # Range for μ_q
+q_sigma_range           = (0.2, 1.0)           # Diagonal Σ_q entries
+
+# ─── Model Bundle (p) Parameters ───
+p_mu_range              = (-3.0, 3.0)             # Range for μ_p
+p_sigma_range           = (0.2, 1.0)           # Diagonal Σ_p entries
+
+
+phi_init_smooth_sigma   = 2.0
+phi_init                = 0.25
+phi_model_offset        = 0.15
+
+# ===========================
+# MASK & INTERACTION THRESHOLDS
+# ===========================
+ 
+overlap_eps             = 1e-3     # Threshold for computing inter-agent overlap
+support_tau             = 0.2           #  # Mask threshold to include point in agent support
+
+# ===== DEBUG / DIAGNOSTICS =====
+
+debug_phase_timing      = F
+debug_grad_timing       = F
+
+#================================
+#  INITIALIZE GLOBAL FIELDS 
+#      WITH GENTLE NOISE
+#================================
+
+diagonal_sigma            = F
+identical_models          = T         # If True, all agents share the same model gauge frame
+
+# ===========================
+# STABILITY AND CLIPPING
+# ===========================
+   
+gradient_clip_phi         = -1     # clip ‖∇φ‖ per pixel to ≤ 1.0
+gradient_clip_phi_model   = -1     # same for φ̃
+
+A_grad_clip               = -1
+
+# ===========================
+# EPSILONS & NUMERICAL STABILITY
+# ==========================
+
+eps                       = 1e-8  # numerical general purpose eps
+
+num_cores                 = 1  # or however many threads you want to use
+domain_size               = (L,) * D
+
+# Gate gamma cases inside the align block (A: j→i, B: i→j) TFFT DOESNT WORK
+
+use_alignment_q           = T
+use_alignment_p           = T
+
+
+use_gamma_A_q             = F    #BLOWS UP
+use_gamma_B_q             = F
+use_gamma_A_p             = F
+use_gamma_B_p             = F     #BLOWS UP
+
+use_gamma_block_q         = F
+use_gamma_block_p         = F
+use_gamma_A               = F
+use_gamma_B               = F
